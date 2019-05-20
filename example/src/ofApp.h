@@ -1,10 +1,8 @@
 #pragma once
 
-// Define which tracking system we're going to use
-#define RTLS_MOTIVE
-
 #include "ofMain.h"
 #include "ofxRTLS.h"
+#include "ofxCalibrationTool.h"
 
 class ofApp: public ofBaseApp{
 	public:

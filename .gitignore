@@ -104,3 +104,4 @@ Desktop.ini
 
 # Visual Studio things
 /.vs/
+*/.vs/*
