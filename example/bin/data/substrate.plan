@@ -1,0 +1,10 @@
+{
+	"substrate_outline" : [
+		[0, 0.017],
+		[0, 0.637]
+	],
+	"substrate_heights" : [
+		{"param" : 0, "bounds" : [0.113, 0.454]},
+		{"param" : 1, "bounds" : [0.113, 0.454]}
+	]
+}

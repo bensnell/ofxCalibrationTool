@@ -22,4 +22,5 @@ class ofApp: public ofBaseApp{
 		void gotMessage(ofMessage msg);
 		
 		ofxRTLS tracker;
+		ofxCalibrationTool ctool;
 };
