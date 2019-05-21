@@ -100,7 +100,7 @@ void ofxCalibrationTool::loadTargetPlan(string _tpFilename) {
 }
 
 // --------------------------------------------------------------
-void ofxCalibrationTool::beginCalibration() {
+void ofxCalibrationTool::beginCalibrationProtocol() {
 	if (bCalibrating) {
 		// Do you want to reset calibration?
 		ofLogNotice("ofxCalibrationTool") << "Already calibrating. Call reset() to restart calibration";

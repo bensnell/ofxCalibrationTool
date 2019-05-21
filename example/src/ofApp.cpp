@@ -60,7 +60,7 @@ void ofApp::exit() {
 void ofApp::keyPressed(int key){
 
 	if (key == 'b') {
-		ctool.beginCalibration();
+		ctool.beginCalibrationProtocol();
 	}
 	if (key == 'l') {
 		ctool.lockTarget();

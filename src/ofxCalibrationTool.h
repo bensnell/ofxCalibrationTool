@@ -36,16 +36,16 @@ public:
 	~ofxCalibrationTool();
 
 	void setupParams();
-
 	void setup();
 
 	// Update this tool with the tool center point used for calibration
 	void update(glm::vec3 _tcp);
 
 	void loadTargetPlan(string _tpFilename = "");
+	bool isTargetPlanLoaded();
 
 	// Begin the calibration process
-	void beginCalibration();
+	void beginCalibrationProtocol();
 	void resetCalibrationProtocol();
 	bool isCalibrating();
 	void lockTarget();
@@ -58,11 +58,12 @@ public:
 	// -----
 
 	// Load a Calibration File
-	//void loadCalibration(string _calFilename = "raw2real.calibration");
+	//void loadCalibrationFile(string _calFilename = "raw2real.calibration");
 	// Transform virtual raw to real
 	//ofNode map(ofNode& from);
+	//glm::mat4x4 map(glm::mat4x4& from);
 
-	bool isTargetPlanLoaded();
+	
 
 
 private:
