@@ -68,6 +68,22 @@ void ofApp::keyPressed(int key){
 	if (key == 'r') {
 		ctool.resetCalibrationProtocol();
 	}
+	if (key == 'g') {
+		ctool.loadCalibrationFile("raw2real.calibration");
+	}
+	if (key == 'm') {
+		vector<Device*>* dvs = tracker.vive.devices.getTrackers();
+		if (dvs != NULL && !dvs->empty()) {
+			// Get the first tracker
+			for (int i = 0; i < dvs->size(); i++) {
+				if ((*dvs)[i]->isActive()) {
+					ofLogNotice() << (*dvs)[i]->position;
+					ofLogNotice() << ctool.getMapped(glm::translate((*dvs)[i]->position));
+					break;
+				}
+			}
+		}
+	}
 
 }
 

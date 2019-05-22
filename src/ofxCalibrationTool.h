@@ -2,6 +2,7 @@
 
 #include "ofMain.h"
 #include "ofxRemoteUIServer.h"
+#include "ofxOpenCv.h"
 
 // The Target Plan for this calibration protcol is a json document with extension .plan
 // and the following elements:
@@ -53,17 +54,14 @@ public:
 	void drawStatus(int x = 0, int y = 0);
 
 	//void clearCalibration();
-	//void saveCalibration();
 
 	// -----
 
 	// Load a Calibration File
-	//void loadCalibrationFile(string _calFilename = "raw2real.calibration");
+	void loadCalibrationFile(string _calFilename = "");
 	// Transform virtual raw to real
-	//ofNode map(ofNode& from);
-	//glm::mat4x4 map(glm::mat4x4& from);
-
-	
+	glm::mat4x4 getMapped(glm::mat4x4 in);
+	void map(glm::mat4x4& inOut);
 
 
 private:
@@ -111,5 +109,28 @@ private:
 	// Y-Axis		(m_4, m_5, m_6)
 	// Z-Axis		(m_8, m_9, m_10)
 	// Translation	(m_12, m_13, m_14)
+
+	void saveCalibration(string _filepath, glm::mat4x4& _mat);
+
+
+
+	// Functions that help finding a rigid body transformation from one
+	// point set to another
+
+
+	// Calculate a transformation
+	bool calculateTransformation(vector<glm::vec3>& testPoints, vector<glm::vec3>& refPoints, glm::mat4x4& outTransMat);
+
+	// ** Helper Functions **
+	// These functions are taken from
+	// https://stackoverflow.com/questions/21206870/opencv-rigid-transformation-between-two-3d-point-clouds/48829595
+	cv::Mat_<double> FindRigidTransform(const cv::Mat_<cv::Vec3d>& points1, const cv::Mat_<cv::Vec3d>& points2);
+	cv::Vec3d CalculateMean(const cv::Mat_<cv::Vec3d>& points);
+
+
+	// Apply the calculated transformation to geometry
+	glm::mat4x4 applyTransformation(glm::mat4x4& frame, glm::mat4x4& transMat);
+	glm::vec3 applyTransformation(glm::vec3& point, glm::mat4x4& transMat);
+
 
 };
