@@ -46,13 +46,17 @@ void ofApp::draw(){
 
 	ctool.drawStatus(10, 150);
 
+	// Draw the points
+	cam.setUpAxis(ctool.getZAxis());
+	cam.begin();
+	ctool.drawDebug();
+	cam.end();
 }
 
 //--------------------------------------------------------------
 void ofApp::exit() {
 
 	tracker.exit();
-
 
 }
 
@@ -71,7 +75,7 @@ void ofApp::keyPressed(int key){
 	if (key == 'g') {
 		ctool.loadCalibrationFile("raw2real.calibration");
 	}
-	if (key == 'm') {
+	if (key == 'n') {
 		vector<Device*>* dvs = tracker.vive.devices.getTrackers();
 		if (dvs != NULL && !dvs->empty()) {
 			// Get the first tracker

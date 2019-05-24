@@ -410,9 +410,39 @@ glm::vec3 ofxCalibrationTool::applyTransformation(glm::vec3 & point, glm::mat4x4
 }
 
 // --------------------------------------------------------------
+void ofxCalibrationTool::drawDebug() {
+	
+	ofPushMatrix();
+	ofEnableDepthTest();
+	ofScale(1000);
 
+	for (int i = 0; i < realTargets.size(); i++) {
+		ofSetColor(255, 0, 0);
+		ofDrawSphere(realTargets[i], 0.01);
+	}
+
+	ofSetColor(0, 0, 255);
+	ofDrawSphere(applyTransformation(tcp, transMat), 0.01);
+
+	ofSetColor(255);
+
+	ofDisableDepthTest();
+	ofPopMatrix();
+}
 
 // --------------------------------------------------------------
+glm::vec3 ofxCalibrationTool::getZAxis() {
+	return glm::vec3(transMat[2][0], transMat[2][1], transMat[2][2]);
+}
 
+// --------------------------------------------------------------
+glm::vec3 ofxCalibrationTool::getYAxis() {
+	return glm::vec3(transMat[1][0], transMat[1][1], transMat[1][2]);
+}
+
+// --------------------------------------------------------------
+glm::vec3 ofxCalibrationTool::getXAxis() {
+	return glm::vec3(transMat[1][0], transMat[0][1], transMat[0][2]);
+}
 
 // --------------------------------------------------------------

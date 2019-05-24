@@ -5,7 +5,7 @@ int main(){
 	// can be OF_WINDOW or OF_FULLSCREEN
 	// pass in width and height too:
 
-	ofSetupOpenGL(600, 400, OF_WINDOW);
+	ofSetupOpenGL(1200, 800, OF_WINDOW);
 
 	ofRunApp(new ofApp());
 }

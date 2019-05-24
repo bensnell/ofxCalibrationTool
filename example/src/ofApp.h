@@ -23,4 +23,5 @@ class ofApp: public ofBaseApp{
 		
 		ofxRTLS tracker;
 		ofxCalibrationTool ctool;
+		ofEasyCam cam;
 };

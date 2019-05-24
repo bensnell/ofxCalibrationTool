@@ -63,6 +63,13 @@ public:
 	glm::mat4x4 getMapped(glm::mat4x4 in);
 	void map(glm::mat4x4& inOut);
 
+	// -----
+
+	void drawDebug();
+
+	glm::vec3 getZAxis();
+	glm::vec3 getYAxis();
+	glm::vec3 getXAxis(); 
 
 private:
 
