@@ -426,7 +426,7 @@ glm::vec3 ofxCalibrationTool::applyTransformation(glm::vec3 & point, glm::mat4x4
 void ofxCalibrationTool::drawDebug() {
 	
 	ofPushMatrix();
-	ofEnableDepthTest();
+	//ofEnableDepthTest();
 	ofScale(1000);
 
 	for (int i = 0; i < realTargets.size(); i++) {
@@ -439,7 +439,7 @@ void ofxCalibrationTool::drawDebug() {
 
 	ofSetColor(255);
 
-	ofDisableDepthTest();
+	//ofDisableDepthTest();
 	ofPopMatrix();
 }
 
