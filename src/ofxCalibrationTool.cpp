@@ -276,6 +276,19 @@ void ofxCalibrationTool::map(glm::mat4x4& inOut) {
 }
 
 // --------------------------------------------------------------
+glm::vec3 ofxCalibrationTool::getMapped(glm::vec3 in) {
+	return applyTransformation(in, transMat);
+}
+
+// --------------------------------------------------------------
+void ofxCalibrationTool::map(glm::vec3& inOut) {
+	glm::vec3 tmp = applyTransformation(inOut, transMat);
+	for (int i = 0; i < 3; i++) {
+		inOut[i] = tmp[i];
+	}
+}
+
+// --------------------------------------------------------------
 bool ofxCalibrationTool::isCalibrating() {
 
 	return bCalibrating;

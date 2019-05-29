@@ -62,6 +62,8 @@ public:
 	// Transform virtual raw to real
 	glm::mat4x4 getMapped(glm::mat4x4 in);
 	void map(glm::mat4x4& inOut);
+	glm::vec3 getMapped(glm::vec3 in);
+	void map(glm::vec3& inOut);
 
 	// -----
 
