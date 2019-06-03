@@ -40,7 +40,10 @@ public:
 	void setup();
 
 	// Update this tool with the tool center point used for calibration
+	// Use either of these (not both)
 	void update(glm::vec3 _tcp);
+	void update(glm::mat4x4 _tcpFrame);
+
 
 	void loadTargetPlan(string _tpFilename = "");
 	bool isTargetPlanLoaded();
@@ -59,6 +62,7 @@ public:
 
 	// Load a Calibration File
 	void loadCalibrationFile(string _calFilename = "");
+	bool isCalibrationLoaded();
 	// Transform virtual raw to real
 	glm::mat4x4 getMapped(glm::mat4x4 in);
 	void map(glm::mat4x4& inOut);
@@ -84,6 +88,7 @@ private:
 
 	// Last tcp observed
 	glm::vec3 tcp;
+	glm::mat4x4 tcpFrame;
 	float lastObservationTime = -1;
 
 	//bool bLockOnStatic = false;
@@ -141,5 +146,14 @@ private:
 	glm::mat4x4 applyTransformation(glm::mat4x4& frame, glm::mat4x4& transMat);
 	glm::vec3 applyTransformation(glm::vec3& point, glm::mat4x4& transMat);
 
-
+	bool bCalibrationLoaded = false;
 };
+
+
+
+// Helpers for converting transformation matrices to usable components
+glm::vec3 getTranslation(glm::mat4x4& a);
+glm::vec3 getXAxis(glm::mat4x4& a);
+glm::vec3 getYAxis(glm::mat4x4& a);
+glm::vec3 getZAxis(glm::mat4x4& a);
+void ofTransformAndRotate(glm::mat4x4& a);

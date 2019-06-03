@@ -1,5 +1,32 @@
 #include "ofxCalibrationTool.h"
 
+glm::vec3 getTranslation(glm::mat4x4& a) {
+	return glm::vec3(a[3][0], a[3][1], a[3][2]);
+}
+
+glm::vec3 getXAxis(glm::mat4x4& a) {
+	return glm::vec3(a[0][0], a[0][1], a[0][2]);
+}
+
+glm::vec3 getYAxis(glm::mat4x4& a) {
+	return glm::vec3(a[1][0], a[1][1], a[1][2]);
+}
+
+glm::vec3 getZAxis(glm::mat4x4& a) {
+	return glm::vec3(a[2][0], a[2][1], a[2][2]);
+}
+
+// Perform transformations
+void ofTransformAndRotate(glm::mat4x4& a) {
+	ofTranslate(getTranslation(a));
+	float x, y, z;
+	glm::extractEulerAngleXYZ(a, x, y, z);
+	ofRotateX(glm::degrees(x));
+	ofRotateY(glm::degrees(y));
+	ofRotateZ(glm::degrees(z));
+}
+
+
 // --------------------------------------------------------------
 ofxCalibrationTool::ofxCalibrationTool() {
 
@@ -31,6 +58,14 @@ void ofxCalibrationTool::setup() {
 // --------------------------------------------------------------
 void ofxCalibrationTool::update(glm::vec3 _tcp) {
 	tcp = _tcp;
+	tcpFrame = glm::translate(tcp);
+	lastObservationTime = ofGetElapsedTimef();
+}
+
+// --------------------------------------------------------------
+void ofxCalibrationTool::update(glm::mat4x4 _tcpFrame) {
+	tcpFrame = _tcpFrame;
+	tcp = getTranslation(tcpFrame);
 	lastObservationTime = ofGetElapsedTimef();
 }
 
@@ -143,6 +178,9 @@ void ofxCalibrationTool::lockTarget() {
 		// Export this matrix as a calibration file
 		saveCalibration(ofToDataPath(calFilename), transMat);
 
+		// Mark that we've loaded the calibration
+		bCalibrationLoaded = true;
+
 		ofLogNotice("ofxCalibrationTool") << "Saved calibration file " << calFilename;
 	}
 }
@@ -207,6 +245,8 @@ void ofxCalibrationTool::loadCalibrationFile(string _calFilename) {
 	// TODO: Should we check if it's valid?
 
 	ofLogNotice("ofxCalibrationTool") << "Successfully loaded Calibration file \"" << calFilename << "\"";
+
+	bCalibrationLoaded = true;
 
 	// Save the matrix
 	transMat = tmp;
@@ -298,6 +338,11 @@ bool ofxCalibrationTool::isCalibrating() {
 bool ofxCalibrationTool::isTargetPlanLoaded() {
 
 	return !realTargets.empty() && !square.empty();
+}
+
+// --------------------------------------------------------------
+bool ofxCalibrationTool::isCalibrationLoaded() {
+	return bCalibrationLoaded;
 }
 
 //--------------------------------------------------------------
@@ -434,8 +479,16 @@ void ofxCalibrationTool::drawDebug() {
 		ofDrawSphere(realTargets[i], 0.01);
 	}
 
+	// Draw the central axis at decimeter scale
+	ofDrawAxis(0.1);
+
 	ofSetColor(0, 0, 255);
 	ofDrawSphere(applyTransformation(tcp, transMat), 0.01);
+	ofPushMatrix();
+	ofSetColor(255);
+	ofTransformAndRotate(applyTransformation(tcpFrame, transMat));
+	ofDrawAxis(0.1);
+	ofPopMatrix();
 
 	ofSetColor(255);
 
