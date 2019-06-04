@@ -51,6 +51,7 @@ public:
 	// Begin the calibration process
 	void beginCalibrationProtocol();
 	void resetCalibrationProtocol();
+	void stopCalibrationProtocol();
 	bool isCalibrating();
 	void lockTarget();
 

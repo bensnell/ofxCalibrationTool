@@ -161,6 +161,13 @@ void ofxCalibrationTool::resetCalibrationProtocol() {
 }
 
 // --------------------------------------------------------------
+void ofxCalibrationTool::stopCalibrationProtocol() {
+
+	resetCalibrationProtocol();
+	bCalibrating = false;
+}
+
+// --------------------------------------------------------------
 void ofxCalibrationTool::lockTarget() {
 
 	// Save the last observed location as the corresponding 
