@@ -84,11 +84,11 @@ void ofxCalibrationTool::loadTargetPlan(string _tpFilename) {
 		return;
 	}
 	file >> js;
-	if (!js.contains("calibration_targets")) {
+	if (js.find("calibration_targets") == js.end()) {  //!js.contains("calibration_targets")) {
 		ofLogError("ofxCalibrationTool") << "Target Plan " << tpFilename << " does not contain key " << "calibration_targets. Exiting.";
 		return;
 	}
-	if (!js.contains("calibration_square")) {
+	if (js.find("calibration_square") == js.end()) { //!js.contains("calibration_square")) {
 		ofLogError("ofxCalibrationTool") << "Target Plan " << tpFilename << " does not contain key " << "calibration_square. Exiting.";
 		return;
 	}
@@ -227,7 +227,7 @@ void ofxCalibrationTool::loadCalibrationFile(string _calFilename) {
 		return;
 	}
 	file >> js;
-	if (!js.contains("calibration_transformation_matrix")) {
+	if (js.find("calibration_transformation_matrix") == js.end()) { // !js.contains("calibration_transformation_matrix")) {
 		ofLogError("ofxCalibrationTool") << "Calibration file " << calFilename << " does not contain key " << "calibration_transformation_matrix. Exiting.";
 		return;
 	}
