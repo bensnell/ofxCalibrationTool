@@ -135,16 +135,39 @@ void ofxCalibrationTool::loadTargetPlan(string _tpFilename) {
 }
 
 // --------------------------------------------------------------
+bool ofxCalibrationTool::isReadyToCalibrate(string& err) {
+
+	err = "";
+	bool out = true;
+	
+	if (!isTargetPlanLoaded()) {
+		out = false;
+		err += "Target Plan is not loaded. ";
+	}
+	
+	return out;
+}
+
+// --------------------------------------------------------------
+bool ofxCalibrationTool::isReadyToCalibrate() {
+	string tmp = "";
+	return isReadyToCalibrate(tmp);
+}
+
+// --------------------------------------------------------------
 void ofxCalibrationTool::beginCalibrationProtocol() {
 	if (bCalibrating) {
 		// Do you want to reset calibration?
 		ofLogNotice("ofxCalibrationTool") << "Already calibrating. Call reset() to restart calibration";
 		return;
 	}
-	if (!isTargetPlanLoaded()) {
-		ofLogNotice("ofxCalibrationTool") << "Please load the Target File before calibrating";
+
+	string err = "";
+	if (!isReadyToCalibrate(err)) {
+		ofLogWarning("ofxCalibrationTool") << "Not ready to begin calibrating: " << err;
 		return;
 	}
+
 	bCalibrating = true;
 
 	resetCalibrationProtocol();
@@ -260,27 +283,59 @@ void ofxCalibrationTool::loadCalibrationFile(string _calFilename) {
 }
 
 // --------------------------------------------------------------
-void ofxCalibrationTool::drawStatus(int x, int y) {
-	if (!bCalibrating) return;
+string ofxCalibrationTool::getProgressString() {
+	
+	string out;
+	if (isCalibrating()) {
+		int countSpaces = CLAMP(floor(float(18) / float(realTargets.size())), 1, 5);
+		string filled = "";
+		string empty = "";
+		for (int i = 0; i < countSpaces; i++) {
+			filled += "=";
+			empty += " ";
+		}
+
+		out += "[";
+		for (int i = 0; i < currentTargetIndex; i++) out += filled;
+		for (int i = currentTargetIndex; i < realTargets.size(); i++) out += empty;
+		out += "]\t" + ofToString(currentTargetIndex) + " / " + ofToString(realTargets.size());
+	}
+	else {
+		out = "Not calibrating";
+	}
+	return out;
+}
+
+// --------------------------------------------------------------
+string ofxCalibrationTool::getTaskString() {
+
+	stringstream ss;
+	ss << std::fixed;
+	ss << std::setprecision(3);
+	if (isCalibrating()) {
+		ss << "Align the tracker to\n";
+		ss << "\tTarget # " << currentTargetIndex << "\n";
+		ss << "\tPosition: (" << realTargets[currentTargetIndex].x << ", " << realTargets[currentTargetIndex].y << ", " << realTargets[currentTargetIndex].z << ")";
+	}
+	else {
+		ss << "Not calibrating";
+	}
+	return ss.str();
+}
+
+// --------------------------------------------------------------
+string ofxCalibrationTool::getStatus() {
+	if (!bCalibrating) return "";
 
 	stringstream ss;
 	ss << std::fixed;
 	ss << std::setprecision(3);
 
 	// What is the calibration progress?
-	ss << "Progress:\t[";
-	for (int i = 0; i < currentTargetIndex; i++) ss << "===";
-	for (int i = currentTargetIndex; i < realTargets.size(); i++) ss << "   ";
-	ss << "]\t" << currentTargetIndex << " / " << realTargets.size() << "\n";
+	ss << "Progress:\t" << getProgressString() << "\n";
 
 	// What is the calibration format? automated, manual
-	ss << "Format:\t";
-	switch (mode) {
-	case CALIBRATION_MANUAL: ss << "Manual"; break;
-	case CALIBRATION_AUTOMATED: ss << "Automated"; break;
-	default: ss << "Unknown"; break;
-	}
-	ss << "\n";
+	ss << "Format:\t" << getCalibrationModeName() << "\n";
 
 	ss << "---\n";
 
@@ -291,20 +346,24 @@ void ofxCalibrationTool::drawStatus(int x, int y) {
 
 	// Prompt the user to align to the current target?
 	// What is the current target index, location?
-	ss << "Current Task:\n";
-	ss << "Align the tracker to\n";
-	ss << "\tTarget # " << currentTargetIndex << "\n";
-	ss << "\tPosition: (" << realTargets[currentTargetIndex].x << ", " << realTargets[currentTargetIndex].y << ", " << realTargets[currentTargetIndex].z << ")\n";
-
+	ss << "Current Task:\n" << getTaskString() << "\n";
+	
 	// What is the steadiness progression if the format is automated?
-	if (mode == CALIBRATION_AUTOMATED) {
-		ss << "\tAutomated Progress: [ ]"; // TODO
+	//if (mode == CALIBRATION_AUTOMATED) {
+	//	ss << "\tAutomated Progress: [ ]"; // TODO
 
 
-	}
+	//}
+
+	return ss.str();
+}
+
+// --------------------------------------------------------------
+void ofxCalibrationTool::drawStatus(int x, int y) {
+	if (!bCalibrating) return;
 
 	// Draw this string to screen
-	ofDrawBitmapStringHighlight(ss.str(), x, y);
+	ofDrawBitmapStringHighlight(getStatus(), x, y);
 }
 
 // --------------------------------------------------------------
@@ -517,5 +576,41 @@ glm::vec3 ofxCalibrationTool::getYAxis() {
 glm::vec3 ofxCalibrationTool::getXAxis() {
 	return glm::vec3(transMat[1][0], transMat[0][1], transMat[0][2]);
 }
+
+// --------------------------------------------------------------
+string ofxCalibrationTool::getTargetPlanName() {
+	return tpFilename;
+}
+
+// --------------------------------------------------------------
+string ofxCalibrationTool::getCalibrationFileName() {
+	return calFilename;
+}
+
+// --------------------------------------------------------------
+string ofxCalibrationTool::getCalibrationModeName() {
+	switch (mode) {
+	case CALIBRATION_MANUAL: {
+		return "manual";
+	}; break;
+	case CALIBRATION_AUTOMATED: {
+		return "automated";
+	}; break;
+	default: {
+		return "unknown";
+	}; break;
+	}
+
+}
+
+// --------------------------------------------------------------
+
+// --------------------------------------------------------------
+
+// --------------------------------------------------------------
+
+// --------------------------------------------------------------
+
+// --------------------------------------------------------------
 
 // --------------------------------------------------------------

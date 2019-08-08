@@ -47,14 +47,18 @@ public:
 
 	void loadTargetPlan(string _tpFilename = "");
 	bool isTargetPlanLoaded();
+	string getTargetPlanName();
 
 	// Begin the calibration process
+	bool isReadyToCalibrate(string& err);
+	bool isReadyToCalibrate();
 	void beginCalibrationProtocol();
 	void resetCalibrationProtocol();
 	void stopCalibrationProtocol();
 	bool isCalibrating();
 	void lockTarget();
 
+	string getStatus();
 	void drawStatus(int x = 0, int y = 0);
 
 	//void clearCalibration();
@@ -64,6 +68,7 @@ public:
 	// Load a Calibration File
 	void loadCalibrationFile(string _calFilename = "");
 	bool isCalibrationLoaded();
+	string getCalibrationFileName();
 	// Transform virtual raw to real
 	glm::mat4x4 getMapped(glm::mat4x4 in);
 	void map(glm::mat4x4& inOut);
@@ -77,6 +82,10 @@ public:
 	glm::vec3 getZAxis();
 	glm::vec3 getYAxis();
 	glm::vec3 getXAxis(); 
+
+	string getCalibrationModeName();
+	string getProgressString();
+	string getTaskString();
 
 private:
 
