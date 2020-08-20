@@ -58,7 +58,7 @@ public:
 	bool isCalibrating();
 	void lockTarget();
 
-	string getStatus();
+	string getStatus(bool bZeroIndexed = true);
 	void drawStatus(int x = 0, int y = 0);
 
 	//void clearCalibration();
@@ -85,7 +85,7 @@ public:
 
 	string getCalibrationModeName();
 	string getProgressString();
-	string getTaskString();
+	string getTaskString(bool bZeroIndexed = true);
 
 private:
 
