@@ -307,14 +307,14 @@ string ofxCalibrationTool::getProgressString() {
 }
 
 // --------------------------------------------------------------
-string ofxCalibrationTool::getTaskString() {
+string ofxCalibrationTool::getTaskString(bool bZeroIndexed) {
 
 	stringstream ss;
 	ss << std::fixed;
 	ss << std::setprecision(3);
 	if (isCalibrating()) {
 		ss << "Align the tracker to\n";
-		ss << "\tTarget # " << currentTargetIndex << "\n";
+		ss << "\tTarget # " << (currentTargetIndex + int(!bZeroIndexed)) << "\n";
 		ss << "\tPosition: (" << realTargets[currentTargetIndex].x << ", " << realTargets[currentTargetIndex].y << ", " << realTargets[currentTargetIndex].z << ")";
 	}
 	else {
@@ -324,7 +324,7 @@ string ofxCalibrationTool::getTaskString() {
 }
 
 // --------------------------------------------------------------
-string ofxCalibrationTool::getStatus() {
+string ofxCalibrationTool::getStatus(bool bZeroIndexed) {
 	if (!bCalibrating) return "";
 
 	stringstream ss;
@@ -346,7 +346,7 @@ string ofxCalibrationTool::getStatus() {
 
 	// Prompt the user to align to the current target?
 	// What is the current target index, location?
-	ss << "Current Task:\n" << getTaskString() << "\n";
+	ss << "Current Task:\n" << getTaskString(bZeroIndexed) << "\n";
 	
 	// What is the steadiness progression if the format is automated?
 	//if (mode == CALIBRATION_AUTOMATED) {
